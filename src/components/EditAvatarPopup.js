@@ -1,4 +1,5 @@
 import React from 'react';
+
 import PopupWithForm from './PopupWithForm';
 
 function EditAvatarPopup({ onClose, isOpen, onUpdateAvatar, isLoading }) {
@@ -45,6 +46,7 @@ function EditAvatarPopup({ onClose, isOpen, onUpdateAvatar, isLoading }) {
           value={avatar ?? ''}
           onChange={handleChangeAvatar}
         />
+
         <span className="popup__input-error" id="linkImg-input-error"></span>
       </div>
     </PopupWithForm>

@@ -28,7 +28,7 @@ function App() {
   // Переменная состояния отвечающая за состояние cards
   const [cards, setCards] = React.useState([]);
   // Стейт, отвечающий за подготовку к удалении карточки. Передаем карту в api и при открытии попапа
-  const [toDeleteCard, setToDeleteCard] = React.useState('');
+  const [toDeleteCard, setToDeleteCard] = React.useState({});
 
   // Стейты прелоудеров загрузки
   const [isLoadingAddPopup, setIsLoadingAddPopup] = React.useState(false);
@@ -64,9 +64,12 @@ function App() {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
 
     // Отправляем запрос в API и получаем обновлённые данные карточки
-    api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
-      setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
-    });
+    api
+      .changeLikeCardStatus(card._id, !isLiked)
+      .then(() => {
+        setCards((state) => state.filter((c) => c._id !== card._id));
+      })
+      .catch((err) => alert('Ошибка лайка/дизлайка карточки:', err));
   }
 
   function handleDeleteCardSubmit() {
@@ -162,57 +165,55 @@ function App() {
   // ===== РЕНДЕР КОМПОНЕНТОВ
   // =================================================
   return (
-    <>
-      <CurrentUserContext.Provider value={currentUser}>
-        <Header />
+    <CurrentUserContext.Provider value={currentUser}>
+      <Header />
 
-        <Main /* Обработчики на открытие форм при клике на элементы */
-          onEditAvatar={handleEditAvatarClick}
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onCardClick={handleCardClick}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDeleteClick}
-          cards={cards}
-        />
+      <Main /* Обработчики на открытие форм при клике на элементы */
+        onEditAvatar={handleEditAvatarClick}
+        onEditProfile={handleEditProfileClick}
+        onAddPlace={handleAddPlaceClick}
+        onCardClick={handleCardClick}
+        onCardLike={handleCardLike}
+        onCardDelete={handleCardDeleteClick}
+        cards={cards}
+      />
 
-        <Footer />
+      <Footer />
 
-        <EditProfilePopup
-          isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-          onUpdateUser={handleUpdateUser}
-          isLoading={isLoadingEditPopup}
-        />
-        <EditAvatarPopup
-          isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-          onUpdateAvatar={handleUpdateAvatar}
-          isLoading={isLoadingAvatarPopup}
-        />
+      <EditProfilePopup
+        isOpen={isEditProfilePopupOpen}
+        onClose={closeAllPopups}
+        onUpdateUser={handleUpdateUser}
+        isLoading={isLoadingEditPopup}
+      />
+      <EditAvatarPopup
+        isOpen={isEditAvatarPopupOpen}
+        onClose={closeAllPopups}
+        onUpdateAvatar={handleUpdateAvatar}
+        isLoading={isLoadingAvatarPopup}
+      />
 
-        <AddPlacePopup
-          isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}
-          onAddPlace={handleAddPlaceSubmit}
-          isLoading={isLoadingAddPopup}
-        />
+      <AddPlacePopup
+        isOpen={isAddPlacePopupOpen}
+        onClose={closeAllPopups}
+        onAddPlace={handleAddPlaceSubmit}
+        isLoading={isLoadingAddPopup}
+      />
 
-        <DeleteCardPopup
-          isOpen={isDeleteCardPopupOpen}
-          onClose={closeAllPopups}
-          onDeleteCard={handleDeleteCardSubmit}
-          isLoading={isLoadingDeletePopup}
-        />
+      <DeleteCardPopup
+        isOpen={isDeleteCardPopupOpen}
+        onClose={closeAllPopups}
+        onDeleteCard={handleDeleteCardSubmit}
+        isLoading={isLoadingDeletePopup}
+      />
 
-        <ImagePopup /* Форма открытия попапа картинки-превью */
-          namePopup="image"
-          isOpen={!!selectedCard.name && !!selectedCard.link}
-          card={selectedCard}
-          onClose={closeAllPopups}
-        />
-      </CurrentUserContext.Provider>
-    </>
+      <ImagePopup /* Форма открытия попапа картинки-превью */
+        namePopup="image"
+        isOpen={!!selectedCard.name && !!selectedCard.link}
+        card={selectedCard}
+        onClose={closeAllPopups}
+      />
+    </CurrentUserContext.Provider>
   );
 }
 
