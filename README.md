@@ -11,6 +11,7 @@
 ## Чек-листы для проверки работы
 
 [Спринт 10 ссылка на чек-лист](https://code.s3.yandex.net/web-developer/checklists-pdf/new-program/checklist-10.pdf)
+
 [Спринт 11 ссылка на чек-лист](https://code.s3.yandex.net/web-developer/checklists-pdf/new-program/checklist-11.pdf)
 
 ## В ходе выполнения работы, по шагово в спринтах реализовано:
