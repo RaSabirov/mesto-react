@@ -1,43 +1,11 @@
 import React from 'react';
 import { api } from '../utils/Api';
 import Card from './Card';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
-  // Переменные состояния, отвечающие за состояние профиля
-  const [userName, setUserName] = React.useState('');
-  const [userDescription, setUserDescription] = React.useState('');
-  const [userAvatar, setUserAvatar] = React.useState('');
-  // Переменная состояния отвечающая за состояние cards
-  const [cards, setCards] = React.useState([]);
-
-  // Эффект который будет совершать запрос в API за отображением данных пользователя
-  React.useEffect(() => {
-    api
-      .getUserData()
-      .then((data) => {
-        setUserName(data.name);
-        setUserDescription(data.about);
-        setUserAvatar(data.avatar);
-      })
-      .catch((err) => alert('Ошибка загрузки данных с сервера:', err));
-  }, []);
-
-  // Эффект который будет совершать запрос в API за отображением карточек
-  React.useEffect(() => {
-    api
-      .getInitialCards()
-      .then((data) => {
-        setCards(
-          data.map((item) => ({
-            id: item._id,
-            name: item.name,
-            link: item.link,
-            likes: item.likes.length,
-          }))
-        );
-      })
-      .catch((err) => alert('Ошибка загрузки данных с сервера:', err));
-  }, []);
+function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike, onCardDelete, cards }) {
+  // Подписываем компонент Main на данные из CurrentUserContext
+  const currentUser = React.useContext(CurrentUserContext);
 
   return (
     <main className="content">
@@ -45,17 +13,17 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
         <div className="profile__container">
           <div className="profile__avatar-container">
             <button className="profile__change-avatar" type="button" onClick={onEditAvatar}></button>
-            <img className="profile__image" src={userAvatar} alt="Аватарка профиля" />
+            <img className="profile__image" src={currentUser?.avatar ?? ' '} alt="Аватарка профиля" />
           </div>
           <div className="profile__info">
-            <h1 className="profile__name">{userName}</h1>
+            <h1 className="profile__name">{currentUser?.name ?? ' '}</h1>
             <button
               className="profile__edit-btn link"
               type="button"
               aria-label="Кнопка изменить"
               onClick={onEditProfile}
             ></button>
-            <p className="profile__job">{userDescription}</p>
+            <p className="profile__job">{currentUser?.about ?? ' '}</p>
           </div>
         </div>
         <button
@@ -67,8 +35,14 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
       </section>
       <section className="places page__container">
         <ul className="places__card">
-          {cards.map(({ id, ...props }) => (
-            <Card key={id} {...props} onCardClick={onCardClick} />
+          {cards.map((card) => (
+            <Card
+              key={card._id}
+              card={card}
+              onCardClick={onCardClick}
+              onCardLike={onCardLike}
+              onCardDelete={onCardDelete}
+            />
           ))}
         </ul>
       </section>

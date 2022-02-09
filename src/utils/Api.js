@@ -29,7 +29,54 @@ class Api {
     }).then(this._errorHandler);
   }
 
-  // Метод для одновременного получения всех данных для приложения
+  setUserAvatar(avatar) {
+    return fetch(`${this._url}/users/me/avatar`, {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify({
+        avatar: avatar,
+      }),
+    }).then(this._errorHandler);
+  }
+
+  setUserInfo(name, about) {
+    return fetch(`${this._url}/users/me`, {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify({
+        name: name,
+        about: about,
+      }),
+    }).then(this._errorHandler);
+  }
+
+  deleteCard(cardId) {
+    return fetch(`${this._url}/cards/${cardId}`, {
+      method: 'DELETE',
+      headers: this._headers,
+    }).then(this._errorHandler);
+  }
+
+  addCard(name, link) {
+    return fetch(`${this._url}/cards`, {
+      method: 'POST',
+      headers: this._headers,
+      body: JSON.stringify({
+        name: name,
+        link: link,
+      }),
+    }).then(this._errorHandler);
+  }
+
+  // Получаем статус лайка на сервере
+  changeLikeCardStatus(cardId, isLiked) {
+    {
+      return fetch(`${this._url}/cards/${cardId}/likes`, {
+        method: `${isLiked ? 'PUT' : 'DELETE'}`,
+        headers: this._headers,
+      }).then(this._errorHandler);
+    }
+  }
 }
 
 export const api = new Api({
