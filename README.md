@@ -4,7 +4,7 @@
 
 ---
 
-[GitHub Pages проекта](///)
+[GitHub Pages проекта](https://rasabirov.github.io/mesto-react/)
 
 ---
 
