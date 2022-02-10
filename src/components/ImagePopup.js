@@ -1,16 +1,14 @@
 import React from 'react';
+import Popup from './Popup';
 
-function ImagePopup({ namePopup, isOpen, onClose, card }) {
+function ImagePopup({ namePopup, isOpen, onClose, card, isImagePopup }) {
   return (
-    <div className={`popup popup_type_${namePopup} ${isOpen ? 'popup_is-opened' : ''}`}>
-      <div className="popup__img-container">
-        <button className="popup__close-btn link" type="button" aria-label="Кнопка закрыть" onClick={onClose}></button>
-        <figure className="popup__figure">
-          <img className="popup__modal-img" src={card.link} alt={card.name} />
-          <figcaption className="popup__caption">{card.name}</figcaption>
-        </figure>
-      </div>
-    </div>
+    <Popup isOpen={isOpen} namePopup={namePopup} onClose={onClose} isImagePopup={isImagePopup}>
+      <figure className="popup__figure">
+        <img className="popup__modal-img" src={card.link} alt={card.name} />
+        <figcaption className="popup__caption">{card.name}</figcaption>
+      </figure>
+    </Popup>
   );
 }
 
