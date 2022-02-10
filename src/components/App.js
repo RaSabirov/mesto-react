@@ -65,8 +65,8 @@ function App() {
     // Отправляем запрос в API и получаем обновлённые данные карточки
     api
       .changeLikeCardStatus(card._id, !isLiked)
-      .then(() => {
-        setCards((state) => state.filter((c) => c._id !== card._id));
+      .then((newCard) => {
+        setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
       })
       .catch((err) => alert('Ошибка лайка/дизлайка карточки:', err));
   }
