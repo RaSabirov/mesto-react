@@ -13,6 +13,7 @@
 - JSX
 - CSS
 - JavaScript
+- React
   </br>
 
 ### Функциональность:
